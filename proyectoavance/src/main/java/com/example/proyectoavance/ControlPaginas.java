@@ -6,28 +6,33 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class ControlPaginas {
-
+	
+	// Página principal raíz
+	@GetMapping("/")
+	public String principal() {
+	    return "principal"; 
+	}
     // Página de login
     @GetMapping("/login")
     public String login() {
-        return "login"; // busca login.html en /templates
+        return "login"; 
     }
 
     // Página de registro
     @GetMapping("/registro")
     public String registro() {
-        return "registro"; // busca registro.html en /templates
+        return "registro"; 
     }
 
     // Procesar login (sin validar)
     @PostMapping("/procesarLogin")
     public String procesarLogin() {
-        return "principal"; // siempre redirige a principal.html
+        return "principal"; 
     }
 
     // Procesar registro (sin guardar aún)
     @PostMapping("/procesarRegistro")
     public String procesarRegistro() {
-        return "principal"; // después del registro vuelve a login.html
+        return "principal"; 
     }
 }

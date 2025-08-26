@@ -40,7 +40,7 @@
       font-size: 1.2rem;
       margin-left: 5px;
     }
-
+    
     @media (max-width: 991px) {
       .navbar-collapse {
         text-align: center;
@@ -71,12 +71,24 @@
 
     /* Secciones */
     section {
-      padding: 80px 20px; /* espacio superior e inferior */
+      padding: 60px 20px; /* espacio superior e inferior */
     }
     #productos { background: #ffffff; }
     #ofertas { background: #f8f9fa; }
     #contacto { background: #e9ecef; }
-    
+
+	.card {
+	  overflow: hidden; /* evita que la imagen se salga de la tarjeta */
+	}
+	
+	.card-img-top {
+	  transition: transform 0.5s ease-in-out;
+	}
+	
+	.card:hover .card-img-top {
+	  transform: scale(1.1); /* zoom suave */
+	}
+
   </style>
 </head>
 <body>
@@ -119,6 +131,22 @@
       </div>
     </div>
   </div>
+  
+	<!-- Carrusel de imágenes automático (banner) -->
+	<div id="bannerCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000" style="margin-top:30px;">
+	  <div class="carousel-inner">
+	    <div class="carousel-item active">
+	      <img src="/img/portada3.jpg" class="d-block w-100 img-fluid" alt="Banner 1">
+	    </div>
+	    <div class="carousel-item">
+	      <img src="img/portadaadidas.jpeg" class="d-block w-100 img-fluid" alt="Banner 2">
+	    </div>
+	    <div class="carousel-item">
+	      <img src="img/portadamarcas.jpeg" class="d-block w-100 img-fluid" alt="Banner 3">
+	    </div>
+	  </div>
+	</div>
+
 
   <!-- Sección Productos y Ofertas con contenedores para tarjetas -->
   <section id="productos">
@@ -184,7 +212,7 @@
 
       <!-- Columna 2: Links -->
       <div class="col-md-4 mb-3">
-        <h6 class="fw-bold">Enlaces</h6>
+        <h6 class="fw-bold">Enlaces a:</h6>
         <ul class="list-unstyled">
           <li><a href="#productos" class="text-dark text-decoration-none">Productos</a></li>
           <li><a href="#ofertas" class="text-dark text-decoration-none">Ofertas</a></li>
@@ -221,9 +249,10 @@
   ];
 
   const ofertas = [
-    { nombre: "Jordan Retro 4", precio: 1500, oferta: 1280, img: "/img/travis.png" },
-    { nombre: "Off White black", precio: 1400, oferta: 820, img: "/img/offwhite.png" },
-    { nombre: "Puma Suede", precio: 300, oferta: 250, img: "/img/suede.png" }
+    { nombre: "Puma suede pink", precio: 300, oferta: 230, img: "/img/pumapink.png", imgHover: "/img/pumapink1.png" },
+    { nombre: "Off White black", precio: 1400, oferta: 820, img: "/img/offwhite.png", imgHover: "/img/offwhite1.png" },
+    { nombre: "Puma Suede", precio: 300, oferta: 250, img: "/img/suede.png", imgHover: "/img/puma1.png" },
+    { nombre: "Amiri White", precio: 670, oferta: 550, img: "/img/amiri.png", imgHover: "/img/amiri1.png" }
   ];
 
   function generarTarjetas(lista, contenedorId, mostrarOferta=false) {
@@ -231,9 +260,9 @@
     contenedor.innerHTML = lista.map(p => `
       <div class="col-6 col-md-3 mb-4">
         <div class="card h-100 shadow-sm">
-          <img src="${p.img}" class="card-img-top" alt="${p.nombre}"
-              onmouseenter="this.src='${p.imgHover || p.img}'"
-              onmouseleave="this.src='${p.img}'">
+        <img src="${p.img}" class="card-img-top" alt="${p.nombre}"
+        	  onmouseenter="cambiarImagen(this, '${p.imgHover || p.img}')"
+        	  onmouseleave="cambiarImagen(this, '${p.img}')">
           <div class="card-body text-center">
             <h5 class="card-title">${p.nombre}</h5>
             <p class="card-text">
@@ -248,7 +277,15 @@
       </div>
     `).join("");
   }
-
+  
+  function cambiarImagen(imgElem, nuevaSrc) {
+	  imgElem.style.transform = "scale(1.1)";
+	  setTimeout(() => {
+	    imgElem.src = nuevaSrc;
+	    imgElem.style.transform = "scale(1)";
+	  }, 200); // tiempo de zoom antes de cambiar
+	}
+  
   // Generar tarjetas al cargar
   generarTarjetas(productos, "productos-container");
   generarTarjetas(ofertas, "ofertas-container", true);
