@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tienda Zapatillas</title>
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Iconos -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    .navbar {
+      background-color: #f9f9f9 !important;
+    }
+    /* Navbar */
+    .nav-link {
+      position: relative;
+      color: #333 !important;
+      transition: color 0.3s;
+    }
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;             
+      transform: translateX(-50%);
+      width: 0;               
+      height: 2px;
+      background: #000;
+      transition: width 0.3s;
+    }
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    .navbar-brand {
+      font-weight: bold;
+      font-size: 1.3rem;
+    }
+    .cart-icon {
+      font-size: 1.2rem;
+      margin-left: 5px;
+    }
+    
+    @media (max-width: 991px) {
+      .navbar-collapse {
+        text-align: center;
+      }
+      .navbar-nav {
+        margin: 0 auto;
+      }
+      .nav-link::after {
+        width: 0;
+      }
+      .nav-link:hover::after {
+        width: 20%;
+      }
+    }
+    /* --- Tarjetas de productos --- */
+    .product-card {
+      border: none;
+      overflow: hidden;
+      border-radius: 15px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+    .product-img {
+      position: relative;
+      overflow: hidden;
+    }
+    .product-img img {
+      width: 100%;
+      transition: opacity 0.5s ease;
+      display: block;
+    }
+    .product-img img.hover-img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+    }
+    .product-img:hover img.hover-img {
+      opacity: 1;
+    }
+    .product-img:hover img.main-img {
+      opacity: 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg shadow-sm fixed-top">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="/">
+        <img src="/img/logo1.png" alt="Logo" style="height:40px; margin-right:8px;">
+        Jzapatillas
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="paginaproductos">Productos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#ofertas">Ofertas</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+        </ul>
+        <ul class="navbar-nav ms-lg-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="#"><i class="bi bi-cart3 cart-icon"></i></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Productos -->
+  <section id="productos" class="py-5 mt-5">
+    <div class="container">
+      <h2 class="text-left mb-4">Nuestros Productos</h2>
+      <div class="row g-4" id="productos-container">
+        <!-- Aquí se generan las tarjetas -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+<footer class="mt-5 pt-4">
+  <hr> <!-- Línea divisoria -->
+  <div class="container">
+    <div class="row text-center text-md-start align-items-center">
+      
+      <!-- Columna 1: Logo y nombre -->
+      <div class="col-md-4 mb-3 d-flex align-items-center justify-content-center justify-content-md-start">
+        <img src="/img/logo1.png" alt="Logo" style="height:40px; margin-right:8px;">
+        <span class="fw-bold">Jzapatillas</span>
+      </div>
+
+      <!-- Columna 2: Links -->
+      <div class="col-md-4 mb-3">
+        <h6 class="fw-bold">Enlaces</h6>
+        <ul class="list-unstyled">
+          <li><a href="paginaproductos" class="text-dark text-decoration-none">Productos</a></li>
+          <li><a href="#ofertas" class="text-dark text-decoration-none">Ofertas</a></li>
+          <li><a href="#contacto" class="text-dark text-decoration-none">Contacto</a></li>
+        </ul>
+      </div>
+
+      <!-- Columna 3: Redes sociales -->
+      <div class="col-md-4 mb-3">
+        <h6 class="fw-bold">Síguenos</h6>
+        <a href="#" class="text-dark mx-1"><i class="bi bi-facebook fs-5"></i></a>
+        <a href="#" class="text-dark mx-1"><i class="bi bi-instagram fs-5"></i></a>
+        <a href="#" class="text-dark mx-1"><i class="bi bi-twitter fs-5"></i></a>
+      </div>
+
+    </div>
+
+    <div class="text-center mt-3 mb-4">
+      <small class="text-muted">&copy; 2025 Jzapatillas. Todos los derechos reservados.</small>
+    </div>
+  </div>
+</footer>
+
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  
+<script>
+  // Lista de productos (20 -> 5 filas de 4)
+  const productos = [
+    { nombre: "Adidas Forum", precio: 350, img1: "/img/adidas.png", img2: "/img/adidasrosas.png" },
+    { nombre: "Nike air max 270", precio: 420, img1: "/img/air270-1.png", img2: "/img/air270.png" },
+    { nombre: "Nike alpha", precio: 310, img1: "/img/alpha.png", img2: "/img/alpha1.png" },
+    { nombre: "Amiri White", precio: 290, img1: "/img/amiri.png", img2: "/img/amiri1.png" },
+
+    { nombre: "Adidas Court", precio: 270, img1: "/img/court.png", img2: "/img/zapatilla15.jpg" },
+    { nombre: "Dc pink and black", precio: 340, img1: "/img/dc.png", img2: "/img/dc1.png" },
+    { nombre: "Adidas Forum pink", precio: 380, img1: "/img/adidasrosas.png", img2: "/img/forumrosas.png" },
+    { nombre: "Jordan 1", precio: 660, img1: "/img/jordan1-1.png", img2: "/img/jordan1.png" },
+
+    { nombre: "Lv pink an white", precio: 2400, img1: "/img/lvpink.png", img2: "/img/lvpink1.png" },
+    { nombre: "New Balance", precio: 580, img1: "/img/newbalance.png", img2: "/img/newbalance1.png" },
+    { nombre: "Off White", precio: 560, img1: "/img/offwhite.png", img2: "/img/zapatilla10.jpg" },
+    { nombre: "Nike Air Max 90", precio: 510, img1: "/img/air90.png", img2: "/img/zapatilla8.jpg" }
+  ];
+
+  // Contenedor
+  const contenedor = document.getElementById("productos-container");
+
+  // Generar tarjetas
+  productos.forEach(p => {
+    contenedor.innerHTML += `
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="card product-card">
+          <div class="product-img">
+            <img src="${p.img1}" class="main-img" alt="${p.nombre}">
+            <img src="${p.img2}" class="hover-img" alt="${p.nombre} hover">
+          </div>
+          <div class="card-body text-center">
+            <h5 class="card-title">${p.nombre}</h5>
+            <p class="card-text text-muted">S/ ${p.precio}.00</p>
+            <a href="#" class="btn btn-dark btn-sm">Añadir al carrito</a>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+</script>
+</body>
+</html>
