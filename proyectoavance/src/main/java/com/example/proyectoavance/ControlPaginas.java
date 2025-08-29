@@ -28,6 +28,11 @@ public class ControlPaginas {
     public String paginaproductos() {
     	return "paginaproductos";
     }
+    
+    @GetMapping("/paginaofertas")
+    public String paginaofertas() {
+    	return "paginaofertas";
+    }
 
     // Procesar login (sin validar)
     @PostMapping("/procesarLogin")

@@ -119,7 +119,7 @@
   <!-- Productos -->
   <section id="productos" class="py-5 mt-5">
     <div class="container">
-      <h2 class="text-left mb-4">Nuestros Productos</h2>
+      <h2 class="text-left mb-4">Productos en Oferta</h2>
       <div class="row g-4" id="productos-container">
         <!-- Aquí se generan las tarjetas -->
       </div>
@@ -169,22 +169,22 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   
 <script>
-  // Lista de productos (20 -> 5 filas de 4)
+  // Lista de productos (con precioOriginal y precioOferta)
   const productos = [
-    { nombre: "Adidas Forum", precio: 350, img1: "/img/adidas.png", img2: "/img/adidasrosas.png" },
-    { nombre: "Nike air max 270", precio: 420, img1: "/img/air270-1.png", img2: "/img/air270.png" },
-    { nombre: "Nike alpha", precio: 310, img1: "/img/alpha.png", img2: "/img/alpha1.png" },
-    { nombre: "Amiri White", precio: 290, img1: "/img/amiri.png", img2: "/img/amiri1.png" },
+    { nombre: "Adidas Forum", precioOriginal: 420, precioOferta: 350, img1: "/img/adidas.png", img2: "/img/adidasrosas.png" },
+    { nombre: "Nike air max 270", precioOriginal: 500, precioOferta: 420, img1: "/img/air270-1.png", img2: "/img/air270.png" },
+    { nombre: "Nike alpha", precioOriginal: 380, precioOferta: 310, img1: "/img/alpha.png", img2: "/img/alpha1.png" },
+    { nombre: "Amiri White", precioOriginal: 350, precioOferta: 290, img1: "/img/amiri.png", img2: "/img/amiri1.png" },
 
-    { nombre: "Adidas Court", precio: 270, img1: "/img/court.png", img2: "/img/zapatilla15.jpg" },
-    { nombre: "Dc pink and black", precio: 340, img1: "/img/dc.png", img2: "/img/dc1.png" },
-    { nombre: "Adidas Forum pink", precio: 380, img1: "/img/adidasrosas.png", img2: "/img/forumrosas.png" },
-    { nombre: "Jordan 1", precio: 660, img1: "/img/jordan1-1.png", img2: "/img/jordan1.png" },
+    { nombre: "Adidas Court", precioOriginal: 330, precioOferta: 270, img1: "/img/court.png", img2: "/img/zapatilla15.jpg" },
+    { nombre: "Dc pink and black", precioOriginal: 410, precioOferta: 340, img1: "/img/dc.png", img2: "/img/dc1.png" },
+    { nombre: "Adidas Forum pink", precioOriginal: 460, precioOferta: 380, img1: "/img/adidasrosas.png", img2: "/img/forumrosas.png" },
+    { nombre: "Jordan 1", precioOriginal: 750, precioOferta: 660, img1: "/img/jordan1-1.png", img2: "/img/jordan1.png" },
 
-    { nombre: "Lv pink an white", precio: 2400, img1: "/img/lvpink.png", img2: "/img/lvpink1.png" },
-    { nombre: "New Balance", precio: 580, img1: "/img/newbalance.png", img2: "/img/newbalance1.png" },
-    { nombre: "Off White", precio: 560, img1: "/img/offwhite.png", img2: "/img/zapatilla10.jpg" },
-    { nombre: "Nike Air Max 90", precio: 510, img1: "/img/air90.png", img2: "/img/zapatilla8.jpg" }
+    { nombre: "Lv pink an white", precioOriginal: 2800, precioOferta: 2400, img1: "/img/lvpink.png", img2: "/img/lvpink1.png" },
+    { nombre: "New Balance", precioOriginal: 650, precioOferta: 580, img1: "/img/newbalance.png", img2: "/img/newbalance1.png" },
+    { nombre: "Off White", precioOriginal: 640, precioOferta: 560, img1: "/img/offwhite.png", img2: "/img/zapatilla10.jpg" },
+    { nombre: "Nike Air Max 90", precioOriginal: 590, precioOferta: 510, img1: "/img/air90.png", img2: "/img/zapatilla8.jpg" }
   ];
 
   // Contenedor
@@ -194,14 +194,20 @@
   productos.forEach(p => {
     contenedor.innerHTML += `
       <div class="col-6 col-md-4 col-lg-3">
-        <div class="card product-card">
+        <div class="card product-card position-relative">
+          <!-- Badge de oferta -->
+          <span class="badge bg-danger position-absolute m-2">Oferta</span>
+          
           <div class="product-img">
             <img src="${p.img1}" class="main-img" alt="${p.nombre}">
             <img src="${p.img2}" class="hover-img" alt="${p.nombre} hover">
           </div>
           <div class="card-body text-center">
             <h5 class="card-title">${p.nombre}</h5>
-            <p class="card-text text-muted">S/ ${p.precio}.00</p>
+            <p class="card-text mb-1">
+              <span class="text-muted text-decoration-line-through">S/ ${p.precioOriginal}.00</span>
+            </p>
+            <p class="card-text fw-bold text-danger">S/ ${p.precioOferta}.00</p>
             <a href="#" class="btn btn-dark btn-sm">Añadir al carrito</a>
           </div>
         </div>

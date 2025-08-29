@@ -32,7 +32,7 @@ dependencies {
 
 // Configurar nombre del JAR
 tasks.withType<org.springframework.boot.gradle.tasks.bundling.BootJar> {
-    archiveFileName.set("mi-aplicacion.jar")
+    archiveFileName.set("miaplicacion.jar")
 }
 
 // Configuración para tests
