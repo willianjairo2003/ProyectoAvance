@@ -33,6 +33,11 @@ public class ControlPaginas {
     public String paginaofertas() {
     	return "paginaofertas";
     }
+    
+    @GetMapping("paginacontacto")
+    public String paginacontacto() {
+    	return "paginacontacto";
+    }
 
     // Procesar login (sin validar)
     @PostMapping("/procesarLogin")
