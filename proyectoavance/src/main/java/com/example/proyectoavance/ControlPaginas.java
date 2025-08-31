@@ -38,6 +38,11 @@ public class ControlPaginas {
     public String paginacontacto() {
     	return "paginacontacto";
     }
+    
+    @GetMapping("carritocompras")
+    public String carritocompras() {
+    	return "carritocompras";
+    }
 
     // Procesar login (sin validar)
     @PostMapping("/procesarLogin")

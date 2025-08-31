@@ -111,7 +111,7 @@
         </ul>
         <ul class="navbar-nav ms-lg-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link" href="#"><i class="bi bi-cart3 cart-icon"></i></a>
+            <a class="nav-link" href="carritocompras"><i class="bi bi-cart3 cart-icon"></i></a>
           </li>
         </ul>
       </div>
@@ -150,23 +150,32 @@
 
 
   <!-- Sección Productos y Ofertas con contenedores para tarjetas -->
-  <section id="productos">
-    <div class="container">
-      <h2>Productos</h2>
-      <div class="row" id="productos-container">
-       
-      </div>
+<!-- Sección Productos -->
+<section id="productos">
+  <div class="container">
+    <!-- Cabecera con título y link -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="mb-0">Productos</h2>
+      <a href="paginaproductos" class="fw-bold" style="color: black; text-decoration: underline;">Ver todo</a>
     </div>
-  </section>
+    <!-- Contenedor de cards -->
+    <div class="row" id="productos-container"></div>
+  </div>
+</section>
 
-  <section id="ofertas">
-    <div class="container">
-      <h2>Ofertas</h2>
-      <div class="row" id="ofertas-container">
-        
-      </div>
+<!-- Sección Ofertas -->
+<section id="ofertas">
+  <div class="container">
+    <!-- Cabecera con título y link -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="mb-0">Ofertas</h2>
+      <a href="paginaofertas" class="fw-bold" style="color: black; text-decoration: underline;">Ver todo</a>
     </div>
-  </section>
+    <!-- Contenedor de cards -->
+    <div class="row" id="ofertas-container"></div>
+  </div>
+</section>
+
 
 <section id="mision-vision" class="py-5 bg-light">
   <div class="container text-center">
@@ -246,7 +255,7 @@
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
+<script>
   const productos = [
     { nombre: "Adidas forum", precio: 350, img: "/img/adidas.png", imgHover: "/img/adidasrosas.png" },
     { nombre: "Air Max 90", precio: 400, img: "/img/air90.png", imgHover: "/img/airmax90mujer.png" },
@@ -262,39 +271,40 @@
   ];
 
   function generarTarjetas(lista, contenedorId, mostrarOferta=false) {
-    const contenedor = document.getElementById(contenedorId);
-    contenedor.innerHTML = lista.map(p => `
-      <div class="col-6 col-md-3 mb-4">
-        <div class="card h-100 shadow-sm">
-        <img src="${p.img}" class="card-img-top" alt="${p.nombre}"
-        	  onmouseenter="cambiarImagen(this, '${p.imgHover || p.img}')"
-        	  onmouseleave="cambiarImagen(this, '${p.img}')">
-          <div class="card-body text-center">
-            <h5 class="card-title">${p.nombre}</h5>
-            <p class="card-text">
-              ${mostrarOferta && p.oferta 
-                ? `<span class="text-decoration-line-through text-muted">S/${p.precio}</span> 
-                  <span class="text-danger">S/${p.oferta}</span>` 
-                : `S/${p.precio}`}
-            </p>
-            <a href="#" class="btn btn-dark btn-sm">Agregar al carrito</a>
-          </div>
-        </div>
-      </div>
-    `).join("");
-  }
+	  const contenedor = document.getElementById(contenedorId);
+	  contenedor.innerHTML = lista.map(p => `
+	    <div class="col-6 col-md-3 mb-4">
+	      <div class="card h-100 shadow-sm">
+	        <img src="${p.img}" class="card-img-top" alt="${p.nombre}"
+	          onmouseenter="cambiarImagen(this, '${p.imgHover || p.img}')"
+	          onmouseleave="cambiarImagen(this, '${p.img}')">
+	        <div class="card-body text-center">
+	          <h5 class="card-title">${p.nombre}</h5>
+	          <p class="card-text">
+	            ${mostrarOferta && p.oferta 
+	              ? `<span class="text-decoration-line-through text-muted">S/${p.precio}</span> 
+	                 <span class="text-danger">S/${p.oferta}</span>` 
+	              : `S/${p.precio}`}
+	          </p>
+	        </div>
+	      </div>
+	    </div>
+	  `).join("");
+	}
+
   
   function cambiarImagen(imgElem, nuevaSrc) {
-	  imgElem.style.transform = "scale(1.1)";
-	  setTimeout(() => {
-	    imgElem.src = nuevaSrc;
-	    imgElem.style.transform = "scale(1)";
-	  }, 200); // tiempo de zoom antes de cambiar
-	}
+    imgElem.style.transform = "scale(1.1)";
+    setTimeout(() => {
+      imgElem.src = nuevaSrc;
+      imgElem.style.transform = "scale(1)";
+    }, 200);
+  }
   
   // Generar tarjetas al cargar
   generarTarjetas(productos, "productos-container");
   generarTarjetas(ofertas, "ofertas-container", true);
 </script>
+
 </body>
 </html>
