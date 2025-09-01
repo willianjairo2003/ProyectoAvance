@@ -99,55 +99,27 @@
 
     <div class="row">
       <!-- LISTA DE PRODUCTOS -->
-      <div class="col-lg-8">
-        <div class="card mb-3">
-          <div class="card-body d-flex align-items-center">
-            <img src="/img/air90.png" class="rounded me-3" alt="Producto">
-            <div class="flex-grow-1">
-              <h5 class="card-title mb-1">Zapatillas Nike Air Max 90</h5>
-              <p class="mb-1 text-muted">Talla: 42</p>
-              <p class="fw-bold mb-1">S/ 510.00</p>
-              <button class="btn btn-sm btn-danger">Eliminar</button>
-            </div>
-            <div>
-              <input type="number" value="1" min="1" class="form-control form-control-sm" style="width: 70px;">
-            </div>
-          </div>
-        </div>
-
-        <div class="card mb-3">
-          <div class="card-body d-flex align-items-center">
-            <img src="/img/adidas.png" class="rounded me-3" alt="Producto">
-            <div class="flex-grow-1">
-              <h5 class="card-title mb-1">Adidas Forum</h5>
-              <p class="mb-1 text-muted">Talla: 40</p>
-              <p class="fw-bold mb-1">S/ 350.00</p>
-              <button class="btn btn-sm btn-danger">Eliminar</button>
-            </div>
-            <div>
-              <input type="number" value="2" min="1" class="form-control form-control-sm" style="width: 70px;">
-            </div>
-          </div>
-        </div>
+      <div class="col-lg-8" id="lista-carrito">
+        <!-- Los productos se insertarán aquí con JS -->
       </div>
 
       <!-- RESUMEN DE COMPRA -->
       <div class="col-lg-4">
         <div class="card">
           <div class="card-header bg-dark text-white fw-bold">Resumen</div>
-          <div class="card-body">
+          <div class="card-body" id="resumen">
             <p class="d-flex justify-content-between">
               <span>Subtotal</span>
-              <span>S/ 860.00</span>
+              <span id="subtotal">S/ 0.00</span>
             </p>
             <p class="d-flex justify-content-between">
               <span>Envío</span>
-              <span>S/ 15.00</span>
+              <span id="envio">S/ 15.00</span>
             </p>
             <hr>
             <h5 class="d-flex justify-content-between fw-bold">
               <span>Total</span>
-              <span>S/ 875.00</span>
+              <span id="total">S/ 0.00</span>
             </h5>
             <button class="btn btn-success w-100 mt-3">Proceder al Pago</button>
           </div>
@@ -156,7 +128,6 @@
     </div>
   </div>
 </section>
-
   <!-- Footer -->
 <footer class="mt-5 pt-4">
   <hr> <!-- Línea divisoria -->
@@ -199,5 +170,72 @@
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+  // Productos simulados (pueden venir de tu backend en JSON)
+  const productos = [
+    { id: 1, nombre: "Zapatillas Nike Air Max 90", talla: 42, precio: 510.00, cantidad: 1, img: "/img/air90.png" },
+    { id: 2, nombre: "Adidas Forum", talla: 40, precio: 350.00, cantidad: 2, img: "/img/adidas.png" }
+  ];
+
+  const listaCarrito = document.getElementById("lista-carrito");
+  const subtotalEl = document.getElementById("subtotal");
+  const envioEl = document.getElementById("envio");
+  const totalEl = document.getElementById("total");
+
+  // Función para renderizar el carrito
+  function renderCarrito() {
+    listaCarrito.innerHTML = "";
+    let subtotal = 0;
+
+    productos.forEach(prod => {
+      subtotal += prod.precio * prod.cantidad;
+
+      listaCarrito.innerHTML += `
+        <div class="card mb-3">
+          <div class="card-body d-flex align-items-center">
+            <img src="${prod.img}" class="rounded me-3" alt="Producto" style="width:70px;">
+            <div class="flex-grow-1">
+              <h5 class="card-title mb-1">${prod.nombre}</h5>
+              <p class="mb-1 text-muted">Talla: ${prod.talla}</p>
+              <p class="fw-bold mb-1">S/ ${prod.precio.toFixed(2)}</p>
+              <button class="btn btn-sm btn-danger" onclick="eliminarProducto(${prod.id})">Eliminar</button>
+            </div>
+            <div>
+              <input type="number" value="${prod.cantidad}" min="1" 
+                     class="form-control form-control-sm" style="width: 70px;"
+                     onchange="cambiarCantidad(${prod.id}, this.value)">
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+    subtotalEl.textContent = `S/ ${subtotal.toFixed(2)}`;
+    const envio = 15.00;
+    totalEl.textContent = `S/ ${(subtotal + envio).toFixed(2)}`;
+  }
+
+  // Cambiar cantidad
+  function cambiarCantidad(id, nuevaCantidad) {
+    const prod = productos.find(p => p.id === id);
+    if (prod) {
+      prod.cantidad = parseInt(nuevaCantidad);
+      renderCarrito();
+    }
+  }
+
+  // Eliminar producto
+  function eliminarProducto(id) {
+    const index = productos.findIndex(p => p.id === id);
+    if (index !== -1) {
+      productos.splice(index, 1);
+      renderCarrito();
+    }
+  }
+
+  // Render inicial
+  renderCarrito();
+</script>
 </body>
 </html>
