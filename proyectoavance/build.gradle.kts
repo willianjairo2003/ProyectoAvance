@@ -1,5 +1,5 @@
 plugins {
-    java
+    id("java")
     id("org.springframework.boot") version "3.5.5"
     id("io.spring.dependency-management") version "1.1.7"
 }
@@ -10,7 +10,7 @@ description = "Demo project for Spring Boot"
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(23))
+        languageVersion.set(JavaLanguageVersion.of(21)) // ✅ Cambiado a 21
     }
 }
 
@@ -20,9 +20,7 @@ repositories {
 
 dependencies {
     // Jetty en lugar de Tomcat
-    implementation("org.springframework.boot:spring-boot-starter-jetty") {
-        exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
-    }
+    implementation("org.springframework.boot:spring-boot-starter-jetty")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-web")
 

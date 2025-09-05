@@ -43,6 +43,8 @@ public class ControlPaginas {
     public String carritocompras() {
     	return "carritocompras";
     }
+    
+
 
     // Procesar login (sin validar)
     @PostMapping("/procesarLogin")
