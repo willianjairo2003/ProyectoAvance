@@ -165,8 +165,8 @@
     /* ====== Main content ====== */
     .content {
       min-height: 100vh;
-      background: radial-gradient(80% 120% at 10% 10%, rgba(34,197,94,.12), transparent 40%)
-                  , radial-gradient(80% 120% at 90% 10%, rgba(20,184,166,.12), transparent 40%);
+      background: radial-gradient(80% 120% at 10% 10%, rgba(34,197,94,.12), transparent 40%),
+                  radial-gradient(80% 120% at 90% 10%, rgba(20,184,166,.12), transparent 40%);
       display: flex; flex-direction: column;
     }
 
@@ -200,18 +200,31 @@
     }
 
     @media (max-width: 992px) {
+      /* mantenemos grid pero hacemos sidebar deslizable */
       .app { grid-template-columns: 1fr; }
+
       .sidebar {
         position: fixed;
         inset-block: 0;
         inset-inline-start: 0;
         transform: translateX(-100%);
         transition: transform var(--transition);
-        width: 78%; max-width: 320px;
+        width: 78%;
+        max-width: 320px;
+        z-index: 40;
       }
       .sidebar.open { transform: translateX(0); }
-      .backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.45); backdrop-filter: blur(2px); display: none; z-index: 25; }
+
+      .backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,.45);
+        backdrop-filter: blur(2px);
+        display: none;
+        z-index: 30;
+      }
       .backdrop.show { display: block; }
+
       .toggle-btn { display: inline-flex; align-items: center; gap: 8px; }
       .container { grid-template-columns: repeat(12, 1fr); }
       .col-3, .col-4, .col-6 { grid-column: span 12; }
@@ -286,162 +299,5 @@
       </nav>
     </aside>
 
-    <!-- Backdrop for mobile -->
-    <div class="backdrop" id="backdrop" aria-hidden="true"></div>
-
-    <!-- Content -->
-    <main class="content">
-      <header class="topbar">
-        <button class="toggle-btn" id="toggleSidebar" aria-controls="sidebar" aria-expanded="false">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
-          Menú
-        </button>
-        <div class="breadcrumbs" id="breadcrumbs">Inicio / <strong>Dashboard</strong></div>
-        <div style="margin-left:auto; display:flex; align-items:center; gap:10px;">
-          <span class="brand-sub">Usuario: admin@tienda.com</span>
-          <span style="inline-size:8px; block-size:8px; background:var(--brand); border-radius:999px; display:inline-block;" aria-label="Estado en línea"></span>
-        </div>
-      </header>
-
-      <section class="container" id="dashboard">
-        <article class="card col-3">
-          <h3>Ventas hoy</h3>
-          <div class="stat" id="ventasHoy">S/ 2,350</div>
-        </article>
-        <article class="card col-3">
-          <h3>Pedidos</h3>
-          <div class="stat" id="pedidos">128</div>
-        </article>
-        <article class="card col-3">
-          <h3>Clientes nuevos</h3>
-          <div class="stat" id="clientesNuevos">26</div>
-        </article>
-        <article class="card col-3">
-          <h3>Productos activos</h3>
-          <div class="stat" id="productosActivos">842</div>
-        </article>
-
-        <article class="card col-6">
-          <h3>Resumen</h3>
-          <p style="margin:0;color:var(--muted)">Este es un panel de ejemplo. Conéctalo a tu backend (Spring/PHP/etc.) y reemplaza los datos mock.</p>
-        </article>
-        <article class="card col-6">
-          <h3>Acciones rápidas</h3>
-          <div style="display:flex; flex-wrap: wrap; gap:10px;">
-            <button class="nav-item" style="width:auto" onclick="alert('Crear producto')">+ Nuevo producto</button>
-            <button class="nav-item" style="width:auto" onclick="alert('Generar reporte')">Generar reporte</button>
-            <button class="nav-item" style="width:auto" onclick="alert('Ver inventario bajo')">Inventario bajo</button>
-          </div>
-        </article>
-
-        <article class="card col-12">
-          <h3>Tabla de ejemplo</h3>
-          <div style="overflow:auto; border:1px solid var(--border); border-radius:12px;">
-            <table style="width:100%; border-collapse: collapse; min-width:720px;">
-              <thead>
-                <tr style="background:rgba(255,255,255,.04);">
-                  <th style="text-align:left; padding:12px; border-bottom:1px solid var(--border);">Producto</th>
-                  <th style="text-align:left; padding:12px; border-bottom:1px solid var(--border);">SKU</th>
-                  <th style="text-align:left; padding:12px; border-bottom:1px solid var(--border);">Stock</th>
-                  <th style="text-align:left; padding:12px; border-bottom:1px solid var(--border);">Precio</th>
-                  <th style="text-align:left; padding:12px; border-bottom:1px solid var(--border);">Estado</th>
-                  <th style="text-align:left; padding:12px; border-bottom:1px solid var(--border);">Acciones</th>
-                </tr>
-              </thead>
-              <tbody id="tablaProductos">
-                <!-- Filas generadas por JS -->
-              </tbody>
-            </table>
-          </div>
-        </article>
-      </section>
-    </main>
-  </div>
-
-  <script>
-    // ===== Demo data for table =====
-    const productos = [
-        { nombre: 'Zapatilla Nike Air Max 90', sku: 'NI-AM90', stock: 12, precio: 389, estado: 'Activo' },
-        { nombre: 'Zapatilla Adidas Superstar', sku: 'AD-SS-250', stock: 0, precio: 299, estado: 'Agotado' },
-        { nombre: 'Zapatilla Puma RS-X', sku: 'PU-RSX-777', stock: 7, precio: 349, estado: 'Activo' },
-        { nombre: 'Zapatilla Converse Chuck 70', sku: 'CO-CH70', stock: 31, precio: 199, estado: 'Activo' },
-        { nombre: 'Zapatilla Jordan Retro 4', sku: 'JO-R4-144', stock: 5, precio: 499, estado: 'Bajo' }
-    ];
-
-    function renderTabla() {
-      const body = document.getElementById('tablaProductos');
-      body.innerHTML = productos.map(p => `
-        <tr>
-          <td style="padding:10px 12px; border-bottom:1px solid var(--border);">${p.nombre}</td>
-          <td style="padding:10px 12px; border-bottom:1px solid var(--border);">${p.sku}</td>
-          <td style="padding:10px 12px; border-bottom:1px solid var(--border);">${p.stock}</td>
-          <td style="padding:10px 12px; border-bottom:1px solid var(--border);">S/ ${p.precio.toLocaleString('es-PE')}</td>
-          <td style="padding:10px 12px; border-bottom:1px solid var(--border);">
-            <span style="padding:.2rem .6rem; border-radius:999px; border:1px solid var(--border); background:${p.estado==='Agotado' ? 'rgba(239,68,68,.1)' : p.estado==='Bajo' ? 'rgba(234,179,8,.1)' : 'rgba(34,197,94,.1)'};">${p.estado}</span>
-          </td>
-          <td style="padding:10px 12px; border-bottom:1px solid var(--border); display:flex; gap:8px;">
-            <button class="nav-item" style="width:auto; padding:6px 10px;" onclick="alert('Editar: ${p.sku}')">Editar</button>
-            <button class="nav-item" style="width:auto; padding:6px 10px; background:rgba(239,68,68,.08); border-color:rgba(239,68,68,.35)" onclick="alert('Eliminar: ${p.sku}')">Eliminar</button>
-          </td>
-        </tr>`).join('');
-    }
-
-    // ===== Sidebar toggle (responsive) =====
-    const sidebar = document.getElementById('sidebar');
-    const toggleBtn = document.getElementById('toggleSidebar');
-    const backdrop = document.getElementById('backdrop');
-    const breadcrumbs = document.getElementById('breadcrumbs');
-
-    function openSidebar() {
-      sidebar.classList.add('open');
-      backdrop.classList.add('show');
-      toggleBtn.setAttribute('aria-expanded', 'true');
-    }
-    function closeSidebar() {
-      sidebar.classList.remove('open');
-      backdrop.classList.remove('show');
-      toggleBtn.setAttribute('aria-expanded', 'false');
-    }
-
-    toggleBtn.addEventListener('click', () => {
-      const isOpen = sidebar.classList.contains('open');
-      isOpen ? closeSidebar() : openSidebar();
-    });
-    backdrop.addEventListener('click', closeSidebar);
-
-    // Close sidebar on route click (mobile)
-    document.querySelectorAll('.nav a').forEach(a => {
-      a.addEventListener('click', (e) => {
-        const title = a.getAttribute('data-title') || a.textContent.trim();
-        breadcrumbs.innerHTML = `Inicio / <strong>${title}</strong>`;
-        if (window.matchMedia('(max-width: 992px)').matches) closeSidebar();
-      });
-    });
-
-    // ===== Submenu (Productos) =====
-    document.querySelectorAll('[data-toggle]')?.forEach(btn => {
-      const id = btn.getAttribute('data-toggle');
-      const panel = document.getElementById(id);
-      btn.addEventListener('click', () => {
-        const open = panel.classList.toggle('open');
-        panel.setAttribute('aria-hidden', String(!open));
-        btn.setAttribute('aria-expanded', String(open));
-      });
-    });
-
-    // ===== Simple search filter for nav items =====
-    const search = document.getElementById('searchInput');
-    search.addEventListener('input', () => {
-      const q = search.value.toLowerCase();
-      document.querySelectorAll('.nav a, .nav button.nav-item').forEach(el => {
-        if (el.closest('.logout')) return; // ignore logout style
-        const text = el.textContent.toLowerCase();
-        el.style.display = text.includes(q) ? 'flex' : 'none';
-      });
-    });
-
-    // ===== Render initial table =====
-    renderTabla();
-  </script>
 </body>
 </html>
