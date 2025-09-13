@@ -1,303 +1,176 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Panel de Administración</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Admin - Zapatillas</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    :root {
-      --bg: #0f172a;          /* slate-900 */
-      --bg-elev: #111827;     /* gray-900 */
-      --card: #0b1220;        /* custom dark */
-      --text: #e5e7eb;        /* gray-200 */
-      --muted: #9ca3af;       /* gray-400 */
-      --brand: #22c55e;       /* green-500 */
-      --brand-2: #14b8a6;     /* teal-500 */
-      --border: #1f2937;      /* gray-800 */
-      --hover: #1f2937;       /* gray-800 */
-      --danger: #ef4444;      /* red-500 */
-      --shadow: 0 10px 25px rgba(0,0,0,.35);
-      --radius: 16px;
-      --transition: 220ms ease;
-    }
-
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
     body {
-      margin: 0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      color: var(--text);
-      background: linear-gradient(160deg, var(--bg) 0%, #0b1022 100%);
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
     }
-
-    /* ====== Layout ====== */
-    .app {
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* ====== Sidebar ====== */
     .sidebar {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      background: linear-gradient(180deg, var(--bg-elev), #0b1220);
-      border-right: 1px solid var(--border);
-      padding: 18px 14px;
-      box-shadow: var(--shadow);
-      z-index: 30;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: var(--radius);
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--border);
-    }
-    .brand-logo {
-      inline-size: 36px;
-      block-size: 36px;
-      display: grid;
-      place-items: center;
-      border-radius: 10px;
-      background: linear-gradient(135deg, var(--brand), var(--brand-2));
-      font-weight: 800;
-      color: #00140e;
-    }
-    .brand-title { font-weight: 700; }
-    .brand-sub { font-size: 12px; color: var(--muted); }
-
-    .search {
-      display: flex;
-      gap: 8px;
-      padding: 8px 10px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-    }
-    .search input {
-      flex: 1;
-      background: transparent;
-      border: 0;
-      color: var(--text);
-      outline: none;
-    }
-
-    .nav {
-      margin-top: 6px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      overflow-y: auto;
-      padding-right: 2px;
-      scrollbar-width: thin;
-      scrollbar-color: var(--hover) transparent;
-    }
-
-    .nav-section { padding: 10px 8px 6px; color: var(--muted); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
-
-    .nav a,
-    .nav button.nav-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      width: 100%;
-      padding: 10px 12px;
-      border-radius: 12px;
-      background: transparent;
-      border: 1px solid transparent;
-      color: var(--text);
-      text-decoration: none;
-      cursor: pointer;
-      transition: background var(--transition), border-color var(--transition), transform var(--transition);
-    }
-    .nav a:hover,
-    .nav button.nav-item:hover { background: var(--hover); border-color: var(--border); transform: translateY(-1px); }
-    .nav a.active { background: linear-gradient(135deg, rgba(34,197,94,.18), rgba(20,184,166,.18)); border-color: rgba(34,197,94,.35); }
-
-    .icon { width: 20px; height: 20px; display: inline-grid; place-items: center; opacity: .9; }
-
-    /* Submenú */
-    .submenu { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--transition); }
-    .submenu.open { grid-template-rows: 1fr; }
-    .submenu-inner { overflow: hidden; display: flex; flex-direction: column; gap: 4px; padding-left: 36px; }
-    .submenu-inner a { font-size: 14px; color: var(--muted); }
-    .submenu-inner a:hover { color: var(--text); }
-
-    .spacer { flex: 1; }
-
-    .logout {
-      margin-top: 6px;
-      background: rgba(239,68,68,.08);
-      border-color: rgba(239,68,68,.35) !important;
-    }
-
-    /* ====== Header (top bar on content) ====== */
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 14px 18px;
-      background: rgba(11,18,32,.8);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .toggle-btn {
-      display: none; /* visible only on mobile */
-      background: transparent; border: 1px solid var(--border);
-      color: var(--text); padding: 8px 10px; border-radius: 12px; cursor: pointer;
-    }
-
-    .breadcrumbs { color: var(--muted); font-size: 14px; }
-
-    /* ====== Main content ====== */
-    .content {
       min-height: 100vh;
-      background: radial-gradient(80% 120% at 10% 10%, rgba(34,197,94,.12), transparent 40%),
-                  radial-gradient(80% 120% at 90% 10%, rgba(20,184,166,.12), transparent 40%);
-      display: flex; flex-direction: column;
+      width: 220px;
+      background-color: #212529;
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding-top: 60px;
+      color: #fff;
+      transition: all 0.3s;
     }
-
-    .container {
-      padding: 20px 18px 40px;
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 18px;
+    .sidebar a {
+      color: #ddd;
+      padding: 10px 20px;
+      display: block;
+      text-decoration: none;
     }
-
-    .card {
-      background: linear-gradient(180deg, var(--card), #0a101c);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 16px;
-      min-height: 120px;
+    .sidebar a:hover {
+      background: #343a40;
+      color: #fff;
     }
-
-    .card h3 { margin: 0 0 8px; font-size: 16px; color: var(--muted); }
-    .stat { font-size: 28px; font-weight: 800; letter-spacing: .02em; }
-
-    .col-3 { grid-column: span 3; }
-    .col-4 { grid-column: span 4; }
-    .col-6 { grid-column: span 6; }
-    .col-12 { grid-column: span 12; }
-
-    /* ====== Responsive ====== */
-    @media (max-width: 1200px) {
-      .app { grid-template-columns: 250px 1fr; }
+    .content {
+      margin-left: 220px;
+      padding: 20px;
+      transition: margin-left 0.3s;
     }
-
-    @media (max-width: 992px) {
-      /* mantenemos grid pero hacemos sidebar deslizable */
-      .app { grid-template-columns: 1fr; }
-
+    .navbar {
+      margin-left: 220px;
+      transition: margin-left 0.3s;
+    }
+    @media (max-width: 991px) {
       .sidebar {
-        position: fixed;
-        inset-block: 0;
-        inset-inline-start: 0;
-        transform: translateX(-100%);
-        transition: transform var(--transition);
-        width: 78%;
-        max-width: 320px;
-        z-index: 40;
+        left: -220px;
       }
-      .sidebar.open { transform: translateX(0); }
-
-      .backdrop {
-        position: fixed;
-        inset: 0;
-        background: rgba(0,0,0,.45);
-        backdrop-filter: blur(2px);
-        display: none;
-        z-index: 30;
+      .sidebar.active {
+        left: 0;
       }
-      .backdrop.show { display: block; }
-
-      .toggle-btn { display: inline-flex; align-items: center; gap: 8px; }
-      .container { grid-template-columns: repeat(12, 1fr); }
-      .col-3, .col-4, .col-6 { grid-column: span 12; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      * { transition: none !important; animation: none !important; }
+      .navbar {
+        margin-left: 0;
+      }
+      .content {
+        margin-left: 0;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="app" id="app">
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar" aria-label="Menú de navegación">
-      <div class="brand" aria-label="Identidad de la tienda">
-        <div class="brand-logo">EP</div>
-        <div>
-          <div class="brand-title">ElectroPanel</div>
-          <div class="brand-sub">Administrador</div>
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <h4 class="text-center">Admin</h4>
+    <a href="#">Dashboard</a>
+    <a href="#">Productos</a>
+    <a href="#">Usuarios</a>
+    <a href="#">Pedidos</a>
+    <a href="#">Reportes</a>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+      <button class="btn btn-outline-light d-lg-none me-2" id="toggleSidebar">☰</button>
+      <a class="navbar-brand" href="#">Gestión de Zapatillas</a>
+      <ul class="navbar-nav ms-auto me-3">
+        <li class="nav-item">
+          <a class="nav-link" href="#">Perfil</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Salir</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Contenido principal -->
+  <div class="content">
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+      <h3 class="mb-2">Productos</h3>
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productoModal">+ Agregar Producto</button>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Género</th>
+            <th>Imagen</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Nike Air Max</td>
+            <td>$120</td>
+            <td>15</td>
+            <td>Unisex</td>
+            <td><img src="https://via.placeholder.com/50" class="img-fluid"></td>
+            <td>
+              <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#productoModal">Editar</button>
+              <button class="btn btn-sm btn-danger">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Modal Agregar/Editar -->
+  <div class="modal fade" id="productoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Agregar Producto</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="productoForm">
+            <div class="mb-3">
+              <label class="form-label">Nombre</label>
+              <input type="text" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Precio</label>
+              <input type="number" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Stock</label>
+              <input type="number" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Género</label>
+              <select class="form-select" required>
+                <option value="Unisex">Unisex</option>
+                <option value="Hombre">Hombre</option>
+                <option value="Mujer">Mujer</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Imagen</label>
+              <input type="file" class="form-control">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary">Guardar</button>
         </div>
       </div>
+    </div>
+  </div>
 
-      <label class="search" aria-label="Buscar en el panel">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-        <input type="search" placeholder="Buscar…" id="searchInput" />
-      </label>
-
-      <nav class="nav" id="nav">
-        <div class="nav-section">Principal</div>
-        <a href="#" class="nav-item active" data-title="Dashboard">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13h8V3H3zM13 21h8v-8h-8z"/><path d="M13 3h8v6h-8zM3 15h8v6H3z"/></svg>
-          Dashboard
-        </a>
-
-        <button class="nav-item" data-toggle="submenu-productos" aria-expanded="false">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21 16-4-4-4 4"/><path d="M4 6h16"/><path d="M4 12h8"/></svg>
-          Productos
-        </button>
-        <div class="submenu" id="submenu-productos" aria-hidden="true">
-          <div class="submenu-inner">
-            <a href="#" data-title="Listado de productos">Listado</a>
-            <a href="#" data-title="Agregar producto">Agregar</a>
-            <a href="#" data-title="Categorías">Categorías</a>
-          </div>
-        </div>
-
-        <a href="#" class="nav-item" data-title="Órdenes">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10"/><path d="M7 22h10a2 2 0 0 0 2-2v-7H5v7a2 2 0 0 0 2 2Z"/></svg>
-          Órdenes
-        </a>
-        <a href="#" class="nav-item" data-title="Clientes">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20a6 6 0 0 0-12 0"/><circle cx="12" cy="7" r="4"/></svg>
-          Clientes
-        </a>
-
-        <div class="nav-section">Análisis</div>
-        <a href="#" class="nav-item" data-title="Reportes">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 13h3v5H7zM12 8h3v10h-3zM17 4h3v14h-3z"/></svg>
-          Reportes
-        </a>
-        <a href="#" class="nav-item" data-title="Descuentos">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 14 6-6"/><circle cx="7" cy="7" r="3"/><circle cx="17" cy="17" r="3"/></svg>
-          Descuentos
-        </a>
-
-        <div class="spacer"></div>
-
-        <a href="#" class="nav-item logout" data-title="Cerrar sesión">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg>
-          Cerrar sesión
-        </a>
-      </nav>
-    </aside>
-
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById("toggleSidebar").addEventListener("click", function() {
+      document.getElementById("sidebar").classList.toggle("active");
+    });
+  </script>
 </body>
 </html>
