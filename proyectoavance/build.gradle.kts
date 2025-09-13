@@ -10,10 +10,9 @@ description = "Demo project for Spring Boot"
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(23)
+        languageVersion.set(JavaLanguageVersion.of(23))
     }
 }
-
 
 repositories {
     mavenCentral()
@@ -21,12 +20,15 @@ repositories {
 
 dependencies {
     // Jetty en lugar de Tomcat
-    implementation("org.springframework.boot:spring-boot-starter-jetty") {
-        exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
-    }
+    implementation("org.springframework.boot:spring-boot-starter-jetty")
+
+    // Thymeleaf para vistas
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+
+    // Web (REST + MVC)
     implementation("org.springframework.boot:spring-boot-starter-web")
 
+    // Dependencias para test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }

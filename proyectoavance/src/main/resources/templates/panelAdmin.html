@@ -5,44 +5,63 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Panel Admin - Zapatillas</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f8f9fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f6f9;
     }
+
+    /* Sidebar */
     .sidebar {
       min-height: 100vh;
-      width: 220px;
-      background-color: #212529;
+      width: 240px;
+      background: linear-gradient(180deg, #212529 0%, #343a40 100%);
       position: fixed;
       top: 0;
       left: 0;
       padding-top: 60px;
       color: #fff;
       transition: all 0.3s;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+    }
+    .sidebar h4 {
+      font-weight: bold;
+      margin-bottom: 20px;
     }
     .sidebar a {
-      color: #ddd;
-      padding: 10px 20px;
+      color: #adb5bd;
+      padding: 12px 20px;
       display: block;
       text-decoration: none;
+      font-size: 15px;
+      border-left: 3px solid transparent;
+      transition: 0.3s;
     }
-    .sidebar a:hover {
-      background: #343a40;
+    .sidebar a:hover, .sidebar a.active {
+      background: #495057;
       color: #fff;
+      border-left: 3px solid #0d6efd;
     }
+
+    /* Content */
     .content {
-      margin-left: 220px;
+      margin-left: 240px;
       padding: 20px;
+      padding-top: 80px; /* espacio debajo del navbar */
       transition: margin-left 0.3s;
     }
+
+    /* Navbar */
     .navbar {
-      margin-left: 220px;
+      margin-left: 240px;
       transition: margin-left 0.3s;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
+
     @media (max-width: 991px) {
       .sidebar {
-        left: -220px;
+        left: -240px;
       }
       .sidebar.active {
         left: 0;
@@ -52,6 +71,42 @@
       }
       .content {
         margin-left: 0;
+        padding-top: 80px;
+      }
+    }
+
+    /* Tabla */
+    .table thead {
+      background-color: #0d6efd;
+      color: white;
+    }
+    .btn {
+      border-radius: 8px;
+    }
+
+    /* Modal */
+    .modal-content {
+      border-radius: 12px;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+    }
+
+    /* Acciones botones responsive */
+    @media (max-width: 576px) {
+      .acciones-btns {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: center;
+        gap: 5px;
+      }
+      .acciones-btns .btn {
+        padding: 4px 6px;
+        font-size: 14px;
+      }
+      .acciones-btns .btn i {
+        margin: 0;
+      }
+      .table-responsive {
+        overflow-x: auto;
       }
     }
   </style>
@@ -60,25 +115,25 @@
 
   <!-- Sidebar -->
   <div class="sidebar" id="sidebar">
-    <h4 class="text-center">Admin</h4>
-    <a href="#">Dashboard</a>
-    <a href="#">Productos</a>
-    <a href="#">Usuarios</a>
-    <a href="#">Pedidos</a>
-    <a href="#">Reportes</a>
+    <h4 class="text-center">👟 Admin</h4>
+    <a href="#" class="active"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a>
+    <a href="#"><i class="bi bi-box-seam me-2"></i>Productos</a>
+    <a href="#"><i class="bi bi-people me-2"></i>Usuarios</a>
+    <a href="#"><i class="bi bi-cart-check me-2"></i>Pedidos</a>
+    <a href="#"><i class="bi bi-bar-chart-line me-2"></i>Reportes</a>
   </div>
 
   <!-- Navbar -->
   <nav class="navbar navbar-expand navbar-dark bg-dark fixed-top">
     <div class="container-fluid">
-      <button class="btn btn-outline-light d-lg-none me-2" id="toggleSidebar">☰</button>
-      <a class="navbar-brand" href="#">Gestión de Zapatillas</a>
+      <button class="btn btn-outline-light d-lg-none me-2" id="toggleSidebar"><i class="bi bi-list"></i></button>
+      <a class="navbar-brand fw-bold" href="#">Gestión de Zapatillas</a>
       <ul class="navbar-nav ms-auto me-3">
         <li class="nav-item">
-          <a class="nav-link" href="#">Perfil</a>
+          <a class="nav-link" href="#"><i class="bi bi-person-circle me-1"></i> Perfil</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Salir</a>
+          <a class="nav-link text-danger" href="#"><i class="bi bi-box-arrow-right me-1"></i> Salir</a>
         </li>
       </ul>
     </div>
@@ -86,14 +141,16 @@
 
   <!-- Contenido principal -->
   <div class="content">
-    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
       <h3 class="mb-2">Productos</h3>
-      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productoModal">+ Agregar Producto</button>
+      <button class="btn btn-primary" onclick="openModal()">
+        <i class="bi bi-plus-circle me-1"></i> Agregar Producto
+      </button>
     </div>
 
-    <div class="table-responsive">
-      <table class="table table-bordered table-hover">
-        <thead class="table-dark">
+    <div class="table-responsive shadow-sm rounded bg-white p-3">
+      <table class="table table-bordered table-hover align-middle">
+        <thead>
           <tr>
             <th>ID</th>
             <th>Nombre</th>
@@ -101,52 +158,40 @@
             <th>Stock</th>
             <th>Género</th>
             <th>Imagen</th>
-            <th>Acciones</th>
+            <th class="text-center">Acciones</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>Nike Air Max</td>
-            <td>$120</td>
-            <td>15</td>
-            <td>Unisex</td>
-            <td><img src="https://via.placeholder.com/50" class="img-fluid"></td>
-            <td>
-              <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#productoModal">Editar</button>
-              <button class="btn btn-sm btn-danger">Eliminar</button>
-            </td>
-          </tr>
-        </tbody>
+        <tbody id="tablaProductos"></tbody>
       </table>
     </div>
   </div>
 
   <!-- Modal Agregar/Editar -->
   <div class="modal fade" id="productoModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Agregar Producto</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="modalTitle"><i class="bi bi-box-seam me-2"></i>Agregar Producto</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
           <form id="productoForm">
+            <input type="hidden" id="productoId">
             <div class="mb-3">
               <label class="form-label">Nombre</label>
-              <input type="text" class="form-control" required>
+              <input type="text" class="form-control" id="nombre" required>
             </div>
             <div class="mb-3">
               <label class="form-label">Precio</label>
-              <input type="number" class="form-control" required>
+              <input type="number" class="form-control" id="precio" required>
             </div>
             <div class="mb-3">
               <label class="form-label">Stock</label>
-              <input type="number" class="form-control" required>
+              <input type="number" class="form-control" id="stock" required>
             </div>
             <div class="mb-3">
               <label class="form-label">Género</label>
-              <select class="form-select" required>
+              <select class="form-select" id="genero" required>
                 <option value="Unisex">Unisex</option>
                 <option value="Hombre">Hombre</option>
                 <option value="Mujer">Mujer</option>
@@ -154,13 +199,13 @@
             </div>
             <div class="mb-3">
               <label class="form-label">Imagen</label>
-              <input type="file" class="form-control">
+              <input type="file" class="form-control" id="imagen">
             </div>
           </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary">Guardar</button>
+          <button type="button" class="btn btn-primary" onclick="guardarProducto()">Guardar</button>
         </div>
       </div>
     </div>
@@ -168,9 +213,96 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    document.getElementById("toggleSidebar").addEventListener("click", function() {
+    let productos = [
+      {id: 1, nombre: "Nike Air Max", precio: 120, stock: 15, genero: "Unisex", imagen: "https://via.placeholder.com/50"},
+      {id: 2, nombre: "Adidas Ultraboost", precio: 140, stock: 10, genero: "Hombre", imagen: "https://via.placeholder.com/50"},
+      {id: 3, nombre: "Puma RS-X", precio: 110, stock: 8, genero: "Mujer", imagen: "https://via.placeholder.com/50"},
+      {id: 4, nombre: "Converse All Star", precio: 90, stock: 20, genero: "Unisex", imagen: "https://via.placeholder.com/50"},
+      {id: 5, nombre: "New Balance 574", precio: 100, stock: 12, genero: "Hombre", imagen: "https://via.placeholder.com/50"}
+    ];
+
+    const tabla = document.getElementById("tablaProductos");
+    const modal = new bootstrap.Modal(document.getElementById("productoModal"));
+    let editando = false;
+
+    function mostrarProductos() {
+      tabla.innerHTML = "";
+      productos.forEach(p => {
+        tabla.innerHTML += `
+          <tr>
+            <td>${p.id}</td>
+            <td>${p.nombre}</td>
+            <td>S/${p.precio}</td>
+            <td>${p.stock}</td>
+            <td>${p.genero}</td>
+            <td><img src="${p.imagen}" class="img-fluid rounded" width="50"></td>
+            <td class="text-center">
+              <div class="acciones-btns">
+                <button class="btn btn-sm btn-warning" onclick="editarProducto(${p.id})" title="Editar">
+                  <i class="bi bi-pencil-square"></i>
+                </button>
+                <button class="btn btn-sm btn-danger" onclick="eliminarProducto(${p.id})" title="Eliminar">
+                  <i class="bi bi-trash3"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function openModal() {
+      editando = false;
+      document.getElementById("modalTitle").innerHTML = '<i class="bi bi-box-seam me-2"></i>Agregar Producto';
+      document.getElementById("productoForm").reset();
+      document.getElementById("productoId").value = "";
+      modal.show();
+    }
+
+    function editarProducto(id) {
+      editando = true;
+      const producto = productos.find(p => p.id === id);
+      document.getElementById("productoId").value = producto.id;
+      document.getElementById("nombre").value = producto.nombre;
+      document.getElementById("precio").value = producto.precio;
+      document.getElementById("stock").value = producto.stock;
+      document.getElementById("genero").value = producto.genero;
+      document.getElementById("modalTitle").innerHTML = '<i class="bi bi-pencil-square me-2"></i>Editar Producto';
+      modal.show();
+    }
+
+    function guardarProducto() {
+      const id = document.getElementById("productoId").value;
+      const nombre = document.getElementById("nombre").value;
+      const precio = document.getElementById("precio").value;
+      const stock = document.getElementById("stock").value;
+      const genero = document.getElementById("genero").value;
+      let imagen = document.getElementById("imagen").files[0];
+      let imagenURL = imagen ? URL.createObjectURL(imagen) : "https://via.placeholder.com/50";
+
+      if (editando) {
+        const index = productos.findIndex(p => p.id == id);
+        productos[index] = {id: parseInt(id), nombre, precio, stock, genero, imagen: imagenURL};
+      } else {
+        const newId = productos.length ? Math.max(...productos.map(p => p.id)) + 1 : 1;
+        productos.push({id: newId, nombre, precio, stock, genero, imagen: imagenURL});
+      }
+      modal.hide();
+      mostrarProductos();
+    }
+
+    function eliminarProducto(id) {
+      if (confirm("¿Seguro que deseas eliminar este producto?")) {
+        productos = productos.filter(p => p.id !== id);
+        mostrarProductos();
+      }
+    }
+
+    document.getElementById("toggleSidebar").addEventListener("click", () => {
       document.getElementById("sidebar").classList.toggle("active");
     });
+
+    mostrarProductos();
   </script>
 </body>
 </html>
