@@ -46,7 +46,6 @@
     z-index: 1000; /* debajo de navbar y sidebar */
   }
 
-  
 
   @media (max-width: 991px) {
     .sidebar { left: -240px; }
@@ -67,11 +66,11 @@
 <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
   <h4 class="text-center"><i class="bi bi-person-circle me-2"></i>Admin</h4>
-  <a href="dashboard.html"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a>
-  <a href="productos.html" class="active"><i class="bi bi-box-seam me-2"></i>Productos</a>
-  <a href="usuario.html"><i class="bi bi-people me-2"></i>Usuarios</a>
-  <a href="pedido.html"><i class="bi bi-cart-check me-2"></i>Pedidos</a>
-  <a href="reportes.html"><i class="bi bi-bar-chart-line me-2"></i>Reportes</a>
+  <a href="dashboard"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a>
+  <a href="productos" class="active"><i class="bi bi-box-seam me-2"></i>Productos</a>
+  <a href="usuario"><i class="bi bi-people me-2"></i>Usuarios</a>
+  <a href="pedido"><i class="bi bi-cart-check me-2"></i>Pedidos</a>
+  <a href="reportes"><i class="bi bi-bar-chart-line me-2"></i>Reportes</a>
 </div>
 
 <!-- Navbar -->
@@ -84,7 +83,7 @@
         <a class="nav-link" href="#"><i class="bi bi-person-circle me-1"></i> Perfil</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-danger" href="#"><i class="bi bi-box-arrow-right me-1"></i> Salir</a>
+        <a class="nav-link text-danger" href="login"><i class="bi bi-box-arrow-right me-1"></i> Salir</a>
       </li>
     </ul>
   </div>
@@ -123,7 +122,7 @@
               <td>Nike Air Zoom</td>
               <td>S/ 350</td>
               <td>20</td>
-              <td><img src="https://via.placeholder.com/60" class="img-thumbnail"></td>
+              <td><img src="/img/air270.png" class="img-thumbnail" style="max-width:80px; max-height:80px; width:auto; height:auto;"></td>
               <td>
                 <button class="btn btn-sm btn-warning btn-action me-1" onclick="editarProducto(this)"><i class="bi bi-pencil"></i></button>
                 <button class="btn btn-sm btn-danger btn-action" onclick="eliminarProducto(this)"><i class="bi bi-trash"></i></button>
@@ -131,10 +130,10 @@
             </tr>
             <tr>
               <td>2</td>
-              <td>Adidas Ultraboost</td>
+              <td>Adidas Forum</td>
               <td>S/ 420</td>
               <td>15</td>
-              <td><img src="https://via.placeholder.com/60" class="img-thumbnail"></td>
+              <td><img src="/img/adidas.png" class="img-thumbnail"style="max-width:80px; max-height:80px; width:auto; height:auto;"></td>
               <td>
                 <button class="btn btn-sm btn-warning btn-action me-1" onclick="editarProducto(this)"><i class="bi bi-pencil"></i></button>
                 <button class="btn btn-sm btn-danger btn-action" onclick="eliminarProducto(this)"><i class="bi bi-trash"></i></button>
@@ -142,10 +141,10 @@
             </tr>
             <tr>
               <td>3</td>
-              <td>Puma RS-X</td>
+              <td>Air max 90</td>
               <td>S/ 310</td>
               <td>12</td>
-              <td><img src="https://via.placeholder.com/60" class="img-thumbnail"></td>
+              <td><img src="/img/airmax90mujer.png" class="img-thumbnail"style="max-width:80px; max-height:80px; width:auto; height:auto;"></td>
               <td>
                 <button class="btn btn-sm btn-warning btn-action me-1" onclick="editarProducto(this)"><i class="bi bi-pencil"></i></button>
                 <button class="btn btn-sm btn-danger btn-action" onclick="eliminarProducto(this)"><i class="bi bi-trash"></i></button>
@@ -156,7 +155,7 @@
               <td>New Balance 574</td>
               <td>S/ 280</td>
               <td>25</td>
-              <td><img src="https://via.placeholder.com/60" class="img-thumbnail"></td>
+              <td><img src="/img/newbalance.png" class="img-thumbnail" style="max-width:80px; max-height:80px; width:auto; height:auto;"></td>
               <td>
                 <button class="btn btn-sm btn-warning btn-action me-1" onclick="editarProducto(this)"><i class="bi bi-pencil"></i></button>
                 <button class="btn btn-sm btn-danger btn-action" onclick="eliminarProducto(this)"><i class="bi bi-trash"></i></button>

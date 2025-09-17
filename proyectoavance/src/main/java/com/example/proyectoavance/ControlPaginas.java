@@ -73,8 +73,7 @@ public class ControlPaginas {
     public String reportes() {
     	return "reportes";
     }
-
-
+    
 
 
     @PostMapping("/procesarLogin")
