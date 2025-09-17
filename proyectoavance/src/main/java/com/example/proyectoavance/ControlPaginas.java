@@ -48,12 +48,33 @@ public class ControlPaginas {
     	return "carritocompras";
     }
     
-    @GetMapping("/panelAdmin")
-    public String panelAdmin(Model model) {
+    @GetMapping("/dashboard")
+    public String dashboard(Model model) {
         model.addAttribute("mensaje", "Bienvenido al Panel de Administración");
-        return "panelAdmin"; // busca panelAdmin.html en templates
+        return "dashboard"; // busca panelAdmin.html en templates
     }
     
+    @GetMapping("productos")
+    public String productos() {
+    	return "productos";
+    }
+    
+    @GetMapping("usuario")
+    public String usuario() {
+    	return "usuario";
+    }
+    
+    @GetMapping("pedido")
+    public String pedido() {
+    	return "pedido";
+    }
+    
+    @GetMapping("reportes")
+    public String reportes() {
+    	return "reportes";
+    }
+
+
 
 
     @PostMapping("/procesarLogin")
@@ -64,7 +85,7 @@ public class ControlPaginas {
 
         if ("admin@gmail.com".equals(email) && "123".equals(password)) {
             model.addAttribute("usuario", email);
-            return "redirect:/panelAdmin";
+            return "redirect:/dashboard";
         } else {
             model.addAttribute("usuario", email);
             return "principal";

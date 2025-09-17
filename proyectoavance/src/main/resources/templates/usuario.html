@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Usuarios</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+ body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f9;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    min-height: 100vh;
+    width: 240px;
+    background: linear-gradient(180deg, #212529 0%, #343a40 100%);
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding-top: 60px;
+    color: #fff;
+    transition: all 0.3s;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+    z-index: 1040; /* debajo de la navbar */
+  }
+  .sidebar h4 { font-weight: bold;margin-top: 10px ;margin-bottom: 20px; }
+  .sidebar a { color: #adb5bd; padding: 12px 20px; display: block; text-decoration: none; font-size: 15px; border-left: 3px solid transparent; transition: 0.3s; }
+  .sidebar a:hover, .sidebar a.active { background: #495057; color: #fff; border-left: 3px solid #0d6efd; }
+
+  /* Navbar */
+  .navbar { 
+    margin-left: 240px; 
+    transition: margin-left 0.3s; 
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+    z-index: 1055; /* 🔝 más alto que sidebar y contenido */
+  }
+    .content { margin-left: 240px; padding: 20px; padding-top: 80px; }
+    @media (max-width: 991px) {
+      .sidebar { left: -240px; }
+      .sidebar.active { left: 0; }
+      .navbar { margin-left: 0; }
+      .content { margin-left: 0; }
+    }
+    .card { border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    .table thead { background: #212529; color: #fff; }
+    .modal-dialog { max-width: 500px; }
+    .modal-content { border-radius: 12px; }
+  </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+  <h4 class="text-center" style="margin-top: 10px;margin-bottom: 20px;"><i class="bi bi-person-circle me-2"></i>Admin</h4>
+  <a href="dashboard.html"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a>
+  <a href="productos.html"><i class="bi bi-box-seam me-2"></i>Productos</a>
+  <a href="usuario.html" class="active"><i class="bi bi-people me-2"></i>Usuarios</a>
+  <a href="pedido.html"><i class="bi bi-cart-check me-2"></i>Pedidos</a>
+  <a href="reportes.html"><i class="bi bi-bar-chart-line me-2"></i>Reportes</a>
+</div>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand navbar-dark bg-dark fixed-top">
+  <div class="container-fluid">
+    <button class="btn btn-outline-light d-lg-none me-2" id="toggleSidebar"><i class="bi bi-list"></i></button>
+    <a class="navbar-brand fw-bold" href="#">Gestión de Usuarios</a>
+    <ul class="navbar-nav ms-auto me-3">
+      <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-person-circle"></i> Perfil</a></li>
+      <li class="nav-item"><a class="nav-link text-danger" href="#"><i class="bi bi-box-arrow-right"></i> Salir</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Contenido -->
+<div class="content">
+  <h3 class="mb-4"><i class="bi bi-people me-2"></i>Usuarios</h3>
+
+  <!-- Tarjetas resumen -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <div class="card text-bg-primary text-center p-3">
+        <div class="card-body">
+          <i class="bi bi-people fs-2"></i>
+          <h5>Total Usuarios</h5>
+          <p class="fs-4 fw-bold" id="totalUsuarios">0</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card text-bg-success text-center p-3">
+        <div class="card-body">
+          <i class="bi bi-person-check fs-2"></i>
+          <h5>Usuarios Activos</h5>
+          <p class="fs-4 fw-bold" id="usuariosActivos">0</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card text-bg-warning text-center p-3">
+        <div class="card-body">
+          <i class="bi bi-person-x fs-2"></i>
+          <h5>Usuarios Inactivos</h5>
+          <p class="fs-4 fw-bold" id="usuariosInactivos">0</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón agregar -->
+  <div class="d-flex justify-content-between mb-3">
+    <h5 class="fw-bold">Lista de Usuarios</h5>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalUsuario">
+      <i class="bi bi-plus-circle"></i> Nuevo Usuario
+    </button>
+  </div>
+
+  <!-- Tabla -->
+  <div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Rol</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="tablaUsuarios">
+        <!-- Aquí se cargan dinámicamente -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal Usuario -->
+<div class="modal fade" id="modalUsuario" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form id="formUsuario">
+        <div class="modal-header">
+          <h5 class="modal-title">Nuevo Usuario</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="usuarioId">
+          <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input type="text" id="nombre" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" id="email" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Rol</label>
+            <select id="rol" class="form-select" required>
+              <option value="Admin">Admin</option>
+              <option value="Usuario">Usuario</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Estado</label>
+            <select id="estado" class="form-select" required>
+              <option value="Activo">Activo</option>
+              <option value="Inactivo">Inactivo</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const tablaUsuarios = document.getElementById("tablaUsuarios");
+  const totalUsuarios = document.getElementById("totalUsuarios");
+  const usuariosActivos = document.getElementById("usuariosActivos");
+  const usuariosInactivos = document.getElementById("usuariosInactivos");
+
+  let usuarios = [
+    { id: 1, nombre: "Juan Pérez", email: "juan@mail.com", rol: "Admin", estado: "Activo" },
+    { id: 2, nombre: "Ana Torres", email: "ana@mail.com", rol: "Usuario", estado: "Activo" },
+    { id: 3, nombre: "Carlos Díaz", email: "carlos@mail.com", rol: "Usuario", estado: "Inactivo" }
+  ];
+
+  function renderUsuarios() {
+    tablaUsuarios.innerHTML = "";
+    usuarios.forEach(u => {
+      tablaUsuarios.innerHTML += `
+        <tr>
+          <td>${u.id}</td>
+          <td>${u.nombre}</td>
+          <td>${u.email}</td>
+          <td>${u.rol}</td>
+          <td>
+            <span class="badge ${u.estado === 'Activo' ? 'bg-success' : 'bg-secondary'}">${u.estado}</span>
+          </td>
+          <td>
+            <button class="btn btn-sm btn-warning me-1" onclick="editarUsuario(${u.id})"><i class="bi bi-pencil"></i></button>
+            <button class="btn btn-sm btn-danger" onclick="eliminarUsuario(${u.id})"><i class="bi bi-trash"></i></button>
+          </td>
+        </tr>
+      `;
+    });
+    totalUsuarios.textContent = usuarios.length;
+    usuariosActivos.textContent = usuarios.filter(u => u.estado === "Activo").length;
+    usuariosInactivos.textContent = usuarios.filter(u => u.estado === "Inactivo").length;
+  }
+
+  function editarUsuario(id) {
+    const usuario = usuarios.find(u => u.id === id);
+    document.getElementById("usuarioId").value = usuario.id;
+    document.getElementById("nombre").value = usuario.nombre;
+    document.getElementById("email").value = usuario.email;
+    document.getElementById("rol").value = usuario.rol;
+    document.getElementById("estado").value = usuario.estado;
+    document.querySelector("#modalUsuario .modal-title").textContent = "Editar Usuario";
+    new bootstrap.Modal(document.getElementById("modalUsuario")).show();
+  }
+
+  function eliminarUsuario(id) {
+    if (confirm("¿Seguro que deseas eliminar este usuario?")) {
+      usuarios = usuarios.filter(u => u.id !== id);
+      renderUsuarios();
+    }
+  }
+
+  document.getElementById("formUsuario").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const id = document.getElementById("usuarioId").value;
+    const nuevo = {
+      id: id ? parseInt(id) : usuarios.length + 1,
+      nombre: document.getElementById("nombre").value,
+      email: document.getElementById("email").value,
+      rol: document.getElementById("rol").value,
+      estado: document.getElementById("estado").value
+    };
+    if (id) {
+      const index = usuarios.findIndex(u => u.id == id);
+      usuarios[index] = nuevo;
+    } else {
+      usuarios.push(nuevo);
+    }
+    renderUsuarios();
+    bootstrap.Modal.getInstance(document.getElementById("modalUsuario")).hide();
+    this.reset();
+    document.getElementById("usuarioId").value = "";
+    document.querySelector("#modalUsuario .modal-title").textContent = "Nuevo Usuario";
+  });
+
+  renderUsuarios();
+
+  // Toggle sidebar
+  document.getElementById("toggleSidebar").addEventListener("click", () => {
+    document.getElementById("sidebar").classList.toggle("active");
+  });
+</script>
+</body>
+</html>
