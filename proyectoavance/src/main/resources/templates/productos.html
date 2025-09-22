@@ -240,7 +240,7 @@ document.getElementById("formProducto").addEventListener("submit", function(e) {
   const nombre = document.getElementById("productoNombre").value;
   const precio = "S/ " + document.getElementById("productoPrecio").value;
   const stock = document.getElementById("productoStock").value;
-  const imagen = document.getElementById("productoImagen").value || "https://via.placeholder.com/60";
+  const imagen = document.getElementById("productoImagen").value || "/img/amiri1.png";
 
   if (editandoFila) {
     editandoFila.cells[1].textContent = nombre;
