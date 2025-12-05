@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Productos - Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f9; }
+        .sidebar { min-height:100vh; width:240px; background:linear-gradient(180deg,#212529 0%,#343a40 100%); position:fixed; top:0; left:0; padding-top:60px; color:#fff; box-shadow:2px 0 10px rgba(0,0,0,0.2); z-index:1040; transition:left .3s ease; }
+        .sidebar h4 { font-weight:bold; margin-top:10px; margin-bottom:20px; }
+        .sidebar a { color:#adb5bd; padding:12px 20px; display:block; text-decoration:none; font-size:15px; border-left:3px solid transparent; transition:0.3s; }
+        .sidebar a:hover, .sidebar a.active { background:#495057; color:#fff; border-left:3px solid #0d6efd; }
+        @media (max-width:991px) { .sidebar{left:-240px} .sidebar.active{left:0} }
+        .navbar { margin-left:240px; transition:margin-left .3s; box-shadow:0 2px 10px rgba(0,0,0,0.1); z-index:1055; }
+        .content { margin-left:240px; padding:20px; padding-top:80px; transition:margin-left .3s; }
+        @media (max-width:991px) { .navbar{margin-left:0} .content{margin-left:0} }
+        .table-responsive { box-shadow:0 4px 15px rgba(0,0,0,0.1); border-radius:10px; }
+        th { background: #212529; color: white; }
+        .img-preview { width:60px; height:60px; object-fit:cover; border-radius:6px; }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+    <h4 class="text-center"><i class="bi bi-person-circle me-2"></i>Admin</h4>
+    <a href="dashboard"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a>
+    <a href="productos" class="active"><i class="bi bi-box-seam me-2"></i>Productos</a>
+    <a href="usuario"><i class="bi bi-people me-2"></i>Usuarios</a>
+    <a href="pedido"><i class="bi bi-cart-check me-2"></i>Pedidos</a>
+    <a href="reportes"><i class="bi bi-bar-chart-line me-2"></i>Reportes</a>
+</div>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+        <button class="btn btn-outline-light d-lg-none me-2" id="toggleSidebar"><i class="bi bi-list"></i></button>
+        <a class="navbar-brand fw-bold" href="#">Gestión de Productos</a>
+        <ul class="navbar-nav ms-auto me-3">
+            <li class="nav-item"><a class="nav-link text-danger" href="login"><i class="bi bi-box-arrow-right me-1"></i>Salir</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Contenido principal -->
+<div class="content">
+    <h3 class="mb-4"><i class="bi bi-box-seam me-2"></i>Administración de Productos</h3>
+
+    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalProducto" onclick="nuevoProducto()">
+        <i class="bi bi-plus-circle me-1"></i> Agregar Producto
+    </button>
+
+    <div class="table-responsive">
+        <table class="table table-hover text-center align-middle">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Imagen</th>
+                <th>Nombre</th>
+                <th>Precio Original</th>
+                <th>Precio Oferta</th>
+                <th>Stock</th>
+                <th>Género</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody id="tablaProductos"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal Producto -->
+<div class="modal fade" id="modalProducto" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="tituloModal"><i class="bi bi-box-seam me-2"></i>Nuevo Producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="formProducto" onsubmit="event.preventDefault(); guardarProducto();">
+                    <input type="hidden" id="productoId">
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Nombre</label>
+                            <input id="nombre" type="text" class="form-control" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Precio Original</label>
+                            <input id="precioOriginal" type="number" step="0.01" class="form-control" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Precio Oferta</label>
+                            <input id="precioOferta" type="number" step="0.01" class="form-control" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Stock</label>
+                            <input id="stock" type="number" min="0" class="form-control" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Género</label>
+                            <select id="genero" class="form-select">
+                                <option>Unisex</option>
+                                <option>Hombre</option>
+                                <option>Mujer</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Imagen</label>
+                            <input id="imagen" type="file" class="form-control" accept="image/*" />
+                            <div class="mt-2">
+                                <img id="previewImage" class="img-preview" style="display:none" alt="Preview">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button class="btn btn-primary" onclick="guardarProducto()">Guardar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // SIDEBAR
+    document.getElementById("toggleSidebar").addEventListener("click", () => {
+      document.getElementById("sidebar").classList.toggle("active");
+    });
+
+    // ---------- ELEMENTS (obtener una sola vez) ----------
+    const modalProductoEl = document.getElementById('modalProducto');
+    const modalProductoInstance = new bootstrap.Modal(modalProductoEl);
+    const tituloModal = document.getElementById('tituloModal');
+
+    const inputProductoId = document.getElementById('productoId');
+    const inputNombre = document.getElementById('nombre');
+    const inputPrecioOriginal = document.getElementById('precioOriginal');
+    const inputPrecioOferta = document.getElementById('precioOferta');
+    const inputStock = document.getElementById('stock');
+    const inputGenero = document.getElementById('genero');
+    const inputImagen = document.getElementById('imagen');
+    const previewImage = document.getElementById('previewImage');
+
+    const tablaBody = document.getElementById('tablaProductos');
+
+    // Estado local (sin backend)
+    let productos = [];
+    let editIndex = null; // índice en productos que se edita (null => nuevo)
+
+    // ---------- Helpers ----------
+    function resetForm() {
+      inputProductoId.value = '';
+      inputNombre.value = '';
+      inputPrecioOriginal.value = '';
+      inputPrecioOferta.value = '';
+      inputStock.value = '';
+      inputGenero.value = 'Unisex';
+      inputImagen.value = '';
+      previewImage.style.display = 'none';
+      previewImage.src = '';
+      editIndex = null;
+    }
+
+    function renderTabla() {
+      tablaBody.innerHTML = '';
+      if (!productos.length) {
+        tablaBody.innerHTML = `<tr><td colspan="8" class="small text-muted py-4">No hay productos aún</td></tr>`;
+        return;
+      }
+      productos.forEach((p, i) => {
+        tablaBody.innerHTML += `
+          <tr>
+            <td>${i+1}</td>
+            <td><img src="${p.imagen}" class="img-preview" alt=""></td>
+            <td>${escapeHtml(p.nombre)}</td>
+            <td>S/ ${Number(p.precioOriginal).toFixed(2)}</td>
+            <td>S/ ${Number(p.precioOferta).toFixed(2)}</td>
+            <td>${p.stock}</td>
+            <td>${escapeHtml(p.genero)}</td>
+            <td>
+              <button class="btn btn-warning btn-sm" onclick="editarProducto(${i})"><i class="bi bi-pencil-square"></i></button>
+              <button class="btn btn-danger btn-sm" onclick="eliminarProducto(${i})"><i class="bi bi-trash"></i></button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function escapeHtml(s){ if(s==null) return ''; return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+
+    // ---------- Previsualizar imagen seleccionada ----------
+    inputImagen.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) { previewImage.style.display = 'none'; previewImage.src = ''; return; }
+      const reader = new FileReader();
+      reader.onload = () => {
+        previewImage.src = reader.result;
+        previewImage.style.display = 'inline-block';
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // ---------- Nuevo producto ----------
+    function nuevoProducto(){
+      resetForm();
+      tituloModal.textContent = 'Nuevo Producto';
+      modalProductoInstance.show();
+    }
+
+    // ---------- Editar producto ----------
+    function editarProducto(index){
+      const p = productos[index];
+      if(!p) return;
+      editIndex = index;
+      inputProductoId.value = index;
+      inputNombre.value = p.nombre;
+      inputPrecioOriginal.value = p.precioOriginal;
+      inputPrecioOferta.value = p.precioOferta;
+      inputStock.value = p.stock;
+      inputGenero.value = p.genero || 'Unisex';
+      // mostrar preview de la imagen existente
+      if(p.imagen){
+        previewImage.src = p.imagen;
+        previewImage.style.display = 'inline-block';
+      } else {
+        previewImage.style.display = 'none';
+        previewImage.src = '';
+      }
+      // limpiar input file para que si el usuario quiera subir otra, lo haga
+      inputImagen.value = '';
+      tituloModal.textContent = 'Editar Producto';
+      modalProductoInstance.show();
+    }
+
+    // ---------- Guardar (nuevo o editar) ----------
+    function guardarProducto(){
+      // validar campos básicos
+      const nombre = inputNombre.value.trim();
+      const precioOriginal = inputPrecioOriginal.value;
+      const precioOferta = inputPrecioOferta.value;
+      const stock = inputStock.value;
+      const genero = inputGenero.value;
+      const file = inputImagen.files[0];
+
+      if(!nombre){
+        alert('El nombre es obligatorio');
+        return;
+      }
+      if(precioOriginal === '' || precioOferta === ''){
+        alert('Ingresa precios válidos');
+        return;
+      }
+      if(stock === ''){
+        alert('Ingresa stock');
+        return;
+      }
+
+      // Si estamos editando y NO se seleccionó nuevo archivo, mantenemos la imagen previa
+      if(editIndex !== null){
+        // editar flujo
+        const productoExistente = productos[editIndex];
+        if(file){
+          // nuevo archivo: leer como DataURL
+          const reader = new FileReader();
+          reader.onload = () => {
+            productoExistente.nombre = nombre;
+            productoExistente.precioOriginal = Number(precioOriginal);
+            productoExistente.precioOferta = Number(precioOferta);
+            productoExistente.stock = Number(stock);
+            productoExistente.genero = genero;
+            productoExistente.imagen = reader.result; // reemplaza
+            renderTabla();
+            modalProductoInstance.hide();
+            resetForm();
+          };
+          reader.readAsDataURL(file);
+        } else {
+          // sin nuevo archivo: solo actualizar campos
+          productoExistente.nombre = nombre;
+          productoExistente.precioOriginal = Number(precioOriginal);
+          productoExistente.precioOferta = Number(precioOferta);
+          productoExistente.stock = Number(stock);
+          productoExistente.genero = genero;
+          renderTabla();
+          modalProductoInstance.hide();
+          resetForm();
+        }
+      } else {
+        // nuevo producto: imagen es obligatoria aquí (puedes cambiar si quieres permitir sin imagen)
+        if(!file){
+          alert('Selecciona una imagen para el producto');
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = () => {
+          const nuevo = {
+            nombre,
+            precioOriginal: Number(precioOriginal),
+            precioOferta: Number(precioOferta),
+            stock: Number(stock),
+            genero,
+            imagen: reader.result
+          };
+          productos.push(nuevo);
+          renderTabla();
+          modalProductoInstance.hide();
+          resetForm();
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // ---------- Eliminar ----------
+    function eliminarProducto(index){
+      if(!confirm('¿Deseas eliminar este producto?')) return;
+      productos.splice(index,1);
+      renderTabla();
+    }
+
+    // Inicializar tabla vacía (o puedes seedear ejemplos)
+    renderTabla();
+
+    // Exponer funciones globales usadas en onclick (siempre seguras)
+    window.editarProducto = editarProducto;
+    window.eliminarProducto = eliminarProducto;
+    window.nuevoProducto = nuevoProducto;
+    window.guardarProducto = guardarProducto;
+</script>
+
+</body>
+</html>
