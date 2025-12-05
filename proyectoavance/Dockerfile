@@ -1,5 +1,6 @@
-# Stage 1: Construir la app
-FROM gradle:9.6-jdk23-alpine AS build
+# Stage 1: build
+# Usamos Gradle 8.10 con JDK 21 
+FROM gradle:8.10-jdk21 AS build
 
 WORKDIR /app
 
@@ -8,18 +9,22 @@ COPY build.gradle.kts settings.gradle.kts gradlew ./
 COPY gradle gradle
 COPY src src
 
+# Dar permisos de ejecución al wrapper
+RUN chmod +x gradlew
+
 # Construir el JAR
 RUN ./gradlew clean build --no-daemon
 
-# Stage 2: Imagen ligera para ejecutar
-FROM eclipse-temurin:23-jdk-alpine
+# Stage 2: runtime
+# Usamos Temurin JDK 21 Alpine para un contenedor liviano
+FROM eclipse-temurin:21-jdk-alpine
 
 WORKDIR /app
 
 # Copiar el JAR desde el stage de build
 COPY --from=build /app/build/libs/miaplicacion.jar app.jar
 
-# puerto que usa Spring Boot
+# Puerto que usa Spring Boot
 EXPOSE 8082
 
 # Ejecutar la aplicación
