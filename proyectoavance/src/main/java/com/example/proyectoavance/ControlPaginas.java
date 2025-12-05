@@ -38,12 +38,12 @@ public class ControlPaginas {
     	return "paginaofertas";
     }
     
-    @GetMapping("paginacontacto")
+    @GetMapping("/paginacontacto")
     public String paginacontacto() {
     	return "paginacontacto";
     }
     
-    @GetMapping("carritocompras")
+    @GetMapping("/carritocompras")
     public String carritocompras() {
     	return "carritocompras";
     }
@@ -54,22 +54,22 @@ public class ControlPaginas {
         return "dashboard"; // busca panelAdmin.html en templates
     }
     
-    @GetMapping("productos")
+    @GetMapping("/productos")
     public String productos() {
     	return "productos";
     }
     
-    @GetMapping("usuario")
+    @GetMapping("/usuario")
     public String usuario() {
     	return "usuario";
     }
     
-    @GetMapping("pedido")
+    @GetMapping("/pedido")
     public String pedido() {
     	return "pedido";
     }
     
-    @GetMapping("reportes")
+    @GetMapping("/reportes")
     public String reportes() {
     	return "reportes";
     }
